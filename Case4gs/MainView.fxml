@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import jp.uphy.javafx.console.ConsoleView?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="root"
+            prefWidth="1024"
+            prefHeight="768"
+            fx:controller="edu.kit.iai.easimov.modeler.view.main.MainController">
+  <top >
+    <VBox fx:id="menuBox">
+	    <MenuBar fx:id="menuBar">
+	      <menus>
+	        <Menu text="File">
+	          <items>
+	          	<Menu text="New">
+	          		<MenuItem text="Schematic" onAction="#fileNewSchematic" fx:id="fileNewSchematic"/>
+	          		<MenuItem text="GIS-based" onAction="#fileNewGeo" fx:id="fileNewGeo"/>	
+	          	</Menu>
+	            <MenuItem text="Open"       onAction="#fileOpen" fx:id="fileOpen"/>
+	            <SeparatorMenuItem/>
+	            <MenuItem text="Close"      onAction="#fileClose"  disable="true" fx:id="fileClose"/>
+	            <SeparatorMenuItem/>
+	            <MenuItem text="Save"       onAction="#fileSave"   disable="true" fx:id="fileSave"/>
+	            <MenuItem text="Save As..." onAction="#fileSaveAs" disable="true" fx:id="fileSaveAs"/>
+	            <SeparatorMenuItem/>
+	            <MenuItem text="Import..."  onAction="#fileImport"/>
+	            <MenuItem text="Export..."  onAction="#fileExport" disable="true" fx:id="fileExport"/>
+	            <SeparatorMenuItem/>
+	            <MenuItem text="Exit"       onAction="#fileExit"/>
+	          </items>
+	        </Menu>
+	        <Menu text="Edit">
+	          <items>
+	            <MenuItem text="Undo"          onAction="#editUndo"/>
+	            <MenuItem text="Redo"          onAction="#editRedo"/>
+	            <SeparatorMenuItem/>
+	            <MenuItem text="Cut"           onAction="#editCut" fx:id="editCut"/>
+	            <MenuItem text="Copy"          onAction="#editCopy" fx:id="editCopy"/>
+	            <MenuItem text="Paste"         onAction="#editPaste" fx:id="editPaste"/>
+	            <SeparatorMenuItem/>
+	            <MenuItem text="Find"         onAction="#editFind" fx:id="editFind" />
+	            <MenuItem text="Validate"	  onAction="#editValidate" fx:id="editValidate"/>
+	            <SeparatorMenuItem/>
+	            <MenuItem text="Model Data..." onAction="#editModelData"/>
+	            <SeparatorMenuItem/>
+	            <MenuItem text="Dissolve SuperBlocks Recursively" onAction="#editDissolveRecursively"/>
+	            <SeparatorMenuItem/>
+	            <MenuItem text="Preferences" onAction="#editPreferences" fx:id="editPreferences"/>
+	          </items>
+	        </Menu>
+	        <Menu text="View">
+	          <items>
+	            <MenuItem text="Fit All" onAction="#viewFitAll" fx:id="viewFitAll"/>
+	            <MenuItem text="Fit Selection" onAction="#viewFitSelection" fx:id="viewFitSelection"/>
+	            <SeparatorMenuItem/>
+	            <CheckMenuItem text="Color Voltage-Levels" fx:id="colorVoltageLevelSelection" onAction="#colorVoltageLevels"/>
+	            <SeparatorMenuItem/>
+	            <CheckMenuItem text ="Snap to Grid" selected="true" fx:id ="viewSnapToGrid"/>
+	            <SeparatorMenuItem/>
+	            <CheckMenuItem text="Labels" fx:id="viewShowAllLabels" selected="true" onAction="#viewLabelsShowAll" />
+							<Menu text="Blocks">
+								<items>
+									<CheckMenuItem text="Bus" fx:id="viewBusBlock" onAction="#viewBlocks" selected="true"/>
+									<SeparatorMenuItem/>
+									<CheckMenuItem text="Line" fx:id="viewLineBlock" onAction="#viewBlocks" selected="true"/>
+									<CheckMenuItem text="Transformer" fx:id="viewTransformerBlock" onAction="#viewBlocks" selected="true"/>
+									<CheckMenuItem text="Switch" fx:id="viewSwitchBlock" onAction="#viewBlocks" selected="true"/>
+									<SeparatorMenuItem/>
+									<CheckMenuItem text="Load" fx:id="viewLoadBlock" onAction="#viewBlocks" selected="true"/>
+									<CheckMenuItem text="Generator" fx:id="viewGeneratorBlock" onAction="#viewBlocks" selected="true"/>
+									<CheckMenuItem text="Shunt" fx:id="viewShuntBlock" onAction="#viewBlocks" selected="true"/>
+									<CheckMenuItem text="External-Grid" fx:id="viewExternalGridBlock" onAction="#viewBlocks" selected="true"/>
+									<SeparatorMenuItem/>
+									<CheckMenuItem text="All Branches" fx:id="viewBranchBlocks" onAction="#viewBlocks" selected="true"/>
+									<CheckMenuItem text="All Terminals" fx:id="viewTerminalBlocks" onAction="#viewBlocks" selected="true"/>
+									<CheckMenuItem text="All" fx:id="viewAllBlocks" onAction="#viewBlocks" selected="true"/>
+								</items>
+							</Menu>
+							<SeparatorMenuItem/>
+							<Menu text="Maps">
+								<items>
+									<Menu text="OpenStreetMap">
+										<items>
+											<MenuItem text="OpenStreetMap" fx:id="viewMapOSM" onAction="#viewMap"/>
+											<MenuItem text="OpenStreetMap WMS" fx:id="viewMapOSMWMS" onAction="#viewMap"/>
+											<MenuItem text="OpenCycleMap" fx:id="viewMapOCM" onAction="#viewMap"/>
+										</items>
+									</Menu>	 
+									<Menu text="MapBox">
+										<items>
+											<MenuItem text="MapBox Streets" fx:id="viewMapBoxStreets" onAction="#viewMap"/>
+											<MenuItem text="MapBox Streets Basic" fx:id="viewMapBoxStreetsBasic" onAction="#viewMap"/>
+											<MenuItem text="MapBox Light" fx:id="viewMapBoxLight" onAction="#viewMap"/>
+											<MenuItem text="MapBox Dark" fx:id="viewMapBoxDark" onAction="#viewMap"/>
+											<MenuItem text="MapBox Vector Dark" fx:id="viewMapBoxVectorDark" onAction="#viewMap"/>
+											<MenuItem text="MapBox Vector Light" fx:id="viewMapBoxVectorLight" onAction="#viewMap"/>
+											<MenuItem text="MapBox Satellite" fx:id="viewMapBoxSatellite" onAction="#viewMap"/>
+											<MenuItem text="MapBox Satellite-Streets" fx:id="viewMapBoxStreetSatellite" onAction="#viewMap"/>
+											<MenuItem text="MapBox Wheatpaste" fx:id="viewMapBoxWheatpaste" onAction="#viewMap"/>
+											<MenuItem text="MapBox Comic" fx:id="viewMapBoxComic" onAction="#viewMap"/>
+											<MenuItem text="MapBox Outdoors" fx:id="viewMapBoxOutdoors" onAction="#viewMap"/>
+											<MenuItem text="MapBox Run-Bike-Hike" fx:id="viewMapBoxRunBikeHike" onAction="#viewMap"/>
+											<MenuItem text="MapBox Pencil" fx:id="viewMapBoxPencil" onAction="#viewMap"/>
+											<MenuItem text="MapBox Pirates" fx:id="viewMapBoxPirates" onAction="#viewMap"/>
+											<MenuItem text="MapBox Emerald" fx:id="viewMapBoxEmerald" onAction="#viewMap"/>
+											<MenuItem text="MapBox High-Contrast" fx:id="viewMapBoxHighCOntrast" onAction="#viewMap"/>
+										</items>
+									</Menu>	 
+									<Menu text="BingMaps">
+										<items>									
+											<MenuItem text="Bing Maps Road" fx:id="viewMapBingRoad" onAction="#viewMap"/>
+											<MenuItem text="Bing Maps Aerial" fx:id="viewMapBingAerial" onAction="#viewMap"/>
+											<MenuItem text="Bing Maps Aerial Labels" fx:id="viewMapBingAerialLabel" onAction="#viewMap"/>
+										</items>
+									</Menu>		
+									<Menu text="Stamen">
+										<items>								
+											<MenuItem text="Stamen Terrain" fx:id="viewMapStamenTerrain" onAction="#viewMap"/>
+											<MenuItem text="Stamen Toner" fx:id="viewMapStamenToner" onAction="#viewMap"/>
+											<MenuItem text="Stamen Toner-Lite" fx:id="viewMapStamenTonerLite" onAction="#viewMap"/>
+											<MenuItem text="Stamen Watercolor" fx:id="viewMapStamenWatercolor" onAction="#viewMap"/>
+										</items>
+									</Menu>		
+								<SeparatorMenuItem/>
+								<MenuItem text="Clear Cache" fx:id="viewMapClearCache" onAction="#viewMapClearCache"/>	  								            
+								</items>
+							</Menu>
+	          </items>
+	        </Menu>
+	        <Menu text="ePowSim">
+	          <items>
+	            <MenuItem text="Event Manager..." onAction="#ePowEventManager" fx:id="ePowEventManager"/>
+	            <Menu text="Simulate Current model">
+	              	<MenuItem text="AC Power Flow" onAction="#ePow_simulate_currentModel_AC" fx:id="ePowSimCurrentModel_AC"/>
+	              	<MenuItem text="DC Power Flow" onAction="#ePow_simulate_currentModel_DC" fx:id="ePowSimCurrentModel_DC"/>
+	              	<SeparatorMenuItem/>
+	              	<MenuItem text="AC Optimal Power Flow" onAction="#ePow_simulate_currentModel_AC_OPF" fx:id="ePowSimCurrentModel_AC_OPF"/>
+	              	<MenuItem text="DC Optimal power Flow" onAction="#ePow_simulate_currentModel_DC_OPF" fx:id="ePowSimCurrentModel_DC_OPF"/>
+	              	<SeparatorMenuItem/>
+	              	<MenuItem text="AC Dynamic (Octave)" onAction="#ePow_simulate_currentModelACDynamicOctave" fx:id="ePowSimCurrentModelACDynamicOct"/>
+	              	<MenuItem text="AC Dynamic (Matlab)" onAction="#ePow_simulate_currentModelACDynamicMatlab" fx:id="ePowSimCurrentModelACDynamicMat"/>	              	
+	            </Menu>
+	            <Menu text="Simulate from File">
+	              	<MenuItem text="AC Power Flow..."  onAction="#ePow_simulate_file_AC" fx:id="ePowSimFile_AC"/>
+	              	<MenuItem text="DC Power Flow..."  onAction="#ePow_simulate_file_DC" fx:id="ePowSimFile_DC"/>
+	              	<SeparatorMenuItem/>
+	              	<MenuItem text="AC Optimal Power Flow..."  onAction="#ePow_simulate_file_AC_OPF" fx:id="ePowSimFile_AC_OPF"/>
+	              	<MenuItem text="DC Optimal Power Flow..."  onAction="#ePow_simulate_file_DC_OPF" fx:id="ePowSimFile_DC_OPF"/>
+	            </Menu>
+	            <Menu text="Upload to Simulation">
+                	<MenuItem text="Current Model" onAction="#ePow_uploadToSimulation_currentModel"/>
+                	<MenuItem text="From File..."  onAction="#ePow_uploadToSimulation_file"/>
+              	</Menu>
+	            <MenuItem text="View Simulation Result"  onAction="#ePow_viewSimResult" fx:id="ePowViewSimResult"/>              	
+	            <SeparatorMenuItem/>
+	            <!-- <Label text="Simulation options:" />-->
+	            <CheckMenuItem text="View Results after Simulation" onAction="#handleViewResultOption" fx:id="viewResultSelection" selected="true"/>
+	            <CheckMenuItem text="Save Results after Simulation" onAction="#handleSaveResultOption" fx:id="saveResultSelection" />
+	          </items>
+	        </Menu>
+	        <Menu text="Extras">
+	          <items>
+	            <MenuItem text="Model Modification..." onAction="#editModifyModel" fx:id="editModifyModel"/>
+	            <SeparatorMenuItem/>	          
+	          	<MenuItem text="Create empty Excelsheet..."  onAction="#createEmptyExcel"/>
+	            <Menu text="Modify Layout">
+	              <MenuItem text="Organic"         onAction="#viewLayoutOrganic" fx:id="viewLayoutOrganic"/>
+	              <MenuItem text="Hierarchical"    onAction="#viewLayoutHierarchical" fx:id="viewLayoutHierarchical"/>
+	            </Menu>	          	
+	            <Menu text="Transform Model">
+	              <items>
+	                <MenuItem text="Canonicalize to Oneline-Diagram" onAction="#ePowTransformCanonicalizeToOneLineDiagram"/>
+	                <MenuItem text="Canonicalize Transformer Ports"  onAction="#ePowTransformCanonicalizeTrafoPorts"/>
+	                <!-- <MenuItem text="Set min. Transformer R and X"    onAction="#ePowTransformSetMinBranchRX"/> -->
+	              </items>
+	            </Menu>
+		        <Menu text="Debug">
+		          <MenuItem text="View As mxGraph"   onAction="#debugViewMXGraph"/>
+		          <MenuItem text="SubGroup Randomly" onAction="#debugSubGroupRandomly"/>
+		        </Menu>	          	
+	          </items>
+	        </Menu>
+	        <Menu text="Window">
+	        	 <CheckMenuItem text ="TreeView" fx:id ="windowTreeView" onAction="#windowTreeView" selected="true"/>
+	        	 <CheckMenuItem text ="Console" fx:id ="windowShell" onAction="#windowShell"/>
+	        	 <CheckMenuItem text ="Properties" fx:id ="windowPropertyView" onAction="#windowPropertyView" selected="false"/>
+	        	 <MenuItem text ="FullScreen" fx:id ="windowFullScreen" onAction="#windowFullScreen"/>
+	        	 <SeparatorMenuItem/>
+	        	 <MenuItem text="Modelica Class Browser..." onAction="#windowModelicaClassBrowser"/>
+            </Menu>
+	        <Menu text="Help">
+	          <items>
+	            <MenuItem text="About ePowMod" onAction="#helpAbouteASiMOVModeler"/>
+	          </items>
+	        </Menu>
+	      </menus>
+	    </MenuBar>
+	    <ToolBar >
+	    </ToolBar>
+	  </VBox>
+  </top>
+  <center>
+  <SplitPane fx:id="splitPaneAll" orientation="VERTICAL">
+    <SplitPane fx:id="splitPane"/>
+	<ConsoleView fx:id="console"/>
+  </SplitPane>
+  </center>
+</BorderPane>
