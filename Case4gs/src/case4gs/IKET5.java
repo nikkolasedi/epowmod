@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import javax.json.JsonObject;
 
@@ -60,23 +61,51 @@ public class IKET5 extends Application
 	  epowbus.setBusType(PV);
 	  return epowbus;
   }
-  boolean createPort(EPowBus epowbus, int i) {
+  static boolean createPort(EPowBus epowbus, int i) {
+	 
 	  for(int j =0 ; j<i; j++) {
-	  Port port = new ConservingPort(Integer.toString(j));
+	  Port port = new ConservingPort(Integer.toString(j));	  
 	  epowbus.getPorts().add(port);
 	  }
 	  return true;
   }
   static boolean createConnectionBusToLine(SuperBlock root, EPowBus epowbus, EPowLine epowline) {
-	  Port port = new ConservingPort("port");
-	  epowbus.getPorts().add(port);
-	  root.connect(port, epowline.getFrom());
+	  
+	  if(epowbus.getPorts().size()>1){
+		  Port port2 = new ConservingPort("port2");
+		  epowbus.getPorts().add(port2);
+		  root.connect(port2, epowline.getFrom());
+	  }
+	  else if (epowbus.getPorts().size()>0){
+		  Port port1 = new ConservingPort("port1");
+		  epowbus.getPorts().add(port1);
+		  root.connect(port1, epowline.getFrom());
+		  }
+	  else {
+		  Port port = new ConservingPort("port");
+		  epowbus.getPorts().add(port);
+		  root.connect(port, epowline.getFrom());
+	  }
+	  
 	  return true;
   }
   static boolean createConnectionLineToBus(SuperBlock root,EPowLine epowline,  EPowBus epowbus) {
-	  Port port = new ConservingPort("port");
-	  epowbus.getPorts().add(port);
-	  root.connect(epowline.getTo(), port);
+	  if(epowbus.getPorts().size()>1){
+		  Port port2 = new ConservingPort("port2");
+		  epowbus.getPorts().add(port2);
+		  root.connect(epowline.getTo(), port2);
+	  }
+	  else if (epowbus.getPorts().size()>0){
+		  Port port1 = new ConservingPort("port1");
+		  epowbus.getPorts().add(port1);
+		  root.connect(epowline.getTo(), port1);
+		  }
+	  else {
+		  Port port = new ConservingPort("port");
+		  epowbus.getPorts().add(port);
+		  root.connect(epowline.getTo(), port);
+	  }
+	  
 	  return true;
   }
 
@@ -307,17 +336,38 @@ public class IKET5 extends Application
     //HKC: 2018-11-26 ______________Das macht ein Problem - vorerst nicht nutzen____________
     //Blocks.insert( line13, line13.getFrom(), line13.getTo(), con13 );  */
     
-    EPowBus bus1 = createBus("Bus1",2, 220);
-    EPowBus bus2 = createBus("Bus2",2, 220);
-    EPowLine line1 = createLine("Line1", 1, 2, 3);
+    EPowBus[] busArray = new EPowBus[7];
+    for(int i = 0;i< 7;i++) {
+    	busArray[i] = createBus("Bus"+i,2, 220);
+    }
+    EPowLine[] lineArray = new EPowLine[6];
+    for(int i = 0;i< 6;i++) {
+    	lineArray[i] = createLine("Line"+i, 1, 2, 3);
+    }
     root.getBlocks().addAll(
-  	      asList(
-  	        bus1, bus2, line1
-  	      )
+    	      
+  	        Arrays.asList(busArray)
+  	      
   	    );
-    createConnectionBusToLine(root, bus1, line1);
-    createConnectionLineToBus(root, line1, bus2);
-   
+    	root.getBlocks().addAll(
+      	      
+      	        Arrays.asList(lineArray)
+      	      
+      	    );
+    
+    
+    createConnectionBusToLine(root, busArray[0], lineArray[0]);
+    createConnectionBusToLine(root, busArray[0], lineArray[1]);
+    createConnectionBusToLine(root, busArray[1], lineArray[2]);
+    createConnectionBusToLine(root, busArray[1], lineArray[3]);
+    createConnectionBusToLine(root, busArray[2], lineArray[4]);
+    createConnectionBusToLine(root, busArray[2], lineArray[5]);
+    createConnectionLineToBus(root, lineArray[0], busArray[1]);
+    createConnectionLineToBus(root, lineArray[1], busArray[2]);
+    createConnectionLineToBus(root, lineArray[2], busArray[3]);
+    createConnectionLineToBus(root, lineArray[3], busArray[4]);
+    createConnectionLineToBus(root, lineArray[4], busArray[5]);
+    createConnectionLineToBus(root, lineArray[5], busArray[6]);
     /*root.getBlocks().add(bus1);
     root.getBlocks().add(bus2);
     root.getBlocks().add(line1);*/
